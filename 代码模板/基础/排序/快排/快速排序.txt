@@ -1,0 +1,23 @@
+template<Data>
+bool cmp(const Data &a,const Data &b){//cmp用法，Data代表待排序数组类型
+	return a.x<b.x;//满足条件不换保持原状，false交换
+}
+
+void mysort(int *as, int left, int right){//[b,e]之间
+    int i=left,j=right;
+    int m=as[(j+i)/2];
+    while(i<=j){
+        while(as[i]<m)
+            i++;
+        while(as[j]>m)
+            j--;
+        if(i<=j){
+            swap(as[i],as[j]);
+            i++;j--;
+        }
+    }
+    if(i<right)
+        mysort(as,i,right);
+    if(left<j)
+        mysort(as,left,j);
+}

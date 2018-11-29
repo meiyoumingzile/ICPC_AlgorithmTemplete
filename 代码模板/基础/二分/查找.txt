@@ -1,0 +1,13 @@
+int bin(int *d,int ex,int left,int right){//从小到大的数组，范围[left,right)
+    if(left>=right){
+        return -1;
+    }
+    int mid=(left+right)/2;
+    if(d[mid]==ex)
+        return mid;
+    if(d[mid]>ex){
+        return bin(d,ex,left,mid);
+    }else{
+        return bin(d,ex,mid+1,right);//注意+1,
+    }
+}

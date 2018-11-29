@@ -1,0 +1,37 @@
+2.add(); 大整数相加
+
+   BigInteger a=new BigInteger(“23”);
+
+   BigInteger b=new BigInteger(“34”);
+
+a.      add(b);
+
+ 
+
+3.subtract(); 相减
+
+4.multiply(); 相乘
+
+5.divide();    相除取整
+
+6.remainder(); 取余
+
+7.pow();   a.pow(b)=a^b
+
+8.gcd();   最大公约数
+
+9.abs(); 绝对值
+
+10.negate(); 取反数
+
+11.mod(); a.mod(b)=a%b=a.remainder(b);
+
+12.max(); min();
+
+13.punlic int comareTo();//比较大小
+
+14.boolean equals(); 是否相等,值传递
+
+BigInteger.valueOf(int val) //传入int返回一个相应BigInteger
+ 
+BigInteger.ZERO BigInteger.ONE BigInteger.TEN  0 1 10

@@ -1,0 +1,136 @@
+template<class var>
+struct v2{
+    var x,y;
+
+    void sett(var x,var y){
+        this->x=x;
+        this->y=y;
+    }
+
+    bool operator == (const v2 &t){
+         return (t.x==this->x&&t.y==this->y);
+    }
+};
+static int com(double x,double y){
+        if(abs(x-y)<=inf)
+            return 0;
+        if(x-y>inf)
+            return 1;
+        return -1;
+    }
+struct Math{
+
+    //得到距离
+    static double dis2(v2<double> a,v2<double> b){
+        double ans=(a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y);
+        return ans;
+    }
+    static double dis2(double x1,double y1,double x2,double y2){
+        double ans=(x1-x2)*(x1-x2)+(y1-y2)*(y1-y2);
+        return ans;
+    }
+    static double dis(v2<double> a,v2<double> b){
+        return sqrt(dis2(a,b));
+    }
+    static double dis(double x1,double y1,double x2,double y2){
+        return sqrt(dis2(x1,y1,x2,y2));
+    }
+
+    //得到中点
+    static v2<double> getMid(v2<double> a,v2<double> b){
+        v2<double> ans;
+        ans.sett((a.x+b.x)/2,(a.y+b.y)/2);
+        return ans;
+    }
+    static v2<double> getMid(double x1,double y1,double x2,double y2){
+        v2<double> ans;
+        ans.sett((x1+x2)/2,(y1+y2)/2);
+        return ans;
+    }
+
+    //勾股定理已知AB求C
+    static double pygAB(double A,double B){
+        return sqrt(A*A+B*B);
+    }
+     //勾股定理已知CB求A
+    static double pygCB(double C,double B){
+        return sqrt(C*C-B*B);
+    }
+
+};
+
+struct Line{
+    v2<double> u,v;//u是起始点，v终止点
+    double k,b;//在斜截式里面y=kx+b的k和b
+    double A,B,C;//标准式
+
+    void init(v2<double> u,v2<double> v){//已知直线上两点
+        this->v=v;
+        this->u=u;
+        if((Math::com(u.x,0)==0&&Math::com(u.y,0)==0)||(Math::com(v.x,0)==0&&Math::com(v.y,0)==0)){
+            C=0;
+            if(Math::com(u.x,v.x)==0){
+                A=1;
+                B=0;
+            }else if(Math::com(u.y,v.y)==0){
+                A=0;
+                B=1;
+            }else{
+                A=1;
+                B=Math::com(u.x,0)==0?(-v.x*A/v.y):(-u.x*A/u.y);
+            }
+        }else{
+            C=-1;
+            A=getA(u,v);
+            B=getB(u,v);
+        }
+    }
+    void init(v2<double> u,double k){//已知一点u和斜率K，K是DINF是表示垂直
+        this->u=u;
+        if(Math::com(k,DINF)==0){
+            B=0;
+            A=1;
+            C=-u.x;
+        }else if(Math::com(k,0)==0){
+            A=0;
+            B=1;
+            C=-u.y;
+        }else{
+            B=1;
+            A=-k;
+            C=k*u.x-u.y;
+        }
+    }
+    Line verticalSelf(v2<double> u){
+        Line l;
+        if(Math::com(B,0)==0){
+            l.init(u,DINF);
+        }else{
+            l.init(u,B/A);
+        }
+    }
+
+    double getk(v2<double> u,v2<double> v){
+        return (u.y-v.y)/(u.x-v.x);
+        //return Math::com(u.y,v.y)?(u.x-v.x)/(u.y-v.y):INF;
+    }
+    double getb(v2<double> u,v2<double> v){
+        return u.y-getk(u,v)*u.x;
+    }
+    double getb(v2<double> u,double k){
+        return u.y-k*u.x;
+    }
+
+    double getA(v2<double> u,v2<double> v){
+        return C*(v.y-u.y)/(v.x*u.y-u.x*v.y);
+    }
+
+    double getB(v2<double> u,v2<double> v){
+        return C*(v.x-u.x)/(u.x*v.y-v.x*u.y);
+    }
+
+    static double  dis(Line l,v2<double> u){
+        double ans=u.x*l.A+u.y*l.B+l.C;
+        return abs(ans)/sqrt(l.A*l.A+l.B*l.B);
+    }
+};

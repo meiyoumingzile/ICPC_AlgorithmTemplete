@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<libraryInfos>
+<libraryInfo home="E:\esp\eclipse\eclipse" version="1.7.0_45">
+<bootpath>
+<entry path="E:\esp\eclipse\eclipse\jre\lib\resources.jar"/>
+<entry path="E:\esp\eclipse\eclipse\jre\lib\rt.jar"/>
+<entry path="E:\esp\eclipse\eclipse\jre\lib\sunrsasign.jar"/>
+<entry path="E:\esp\eclipse\eclipse\jre\lib\jsse.jar"/>
+<entry path="E:\esp\eclipse\eclipse\jre\lib\jce.jar"/>
+<entry path="E:\esp\eclipse\eclipse\jre\lib\charsets.jar"/>
+<entry path="E:\esp\eclipse\eclipse\jre\lib\jfr.jar"/>
+<entry path="E:\esp\eclipse\eclipse\jre\classes"/>
+</bootpath>
+<extensionDirs>
+<entry path="E:\esp\eclipse\eclipse\jre\lib\ext"/>
+<entry path="C:\Windows\Sun\Java\lib\ext"/>
+</extensionDirs>
+<endorsedDirs>
+<entry path="E:\esp\eclipse\eclipse\jre\lib\endorsed"/>
+</endorsedDirs>
+</libraryInfo>
+<libraryInfo home="E:\eclipse" version="1.7.0_45">
+<bootpath>
+<entry path="E:\eclipse\jre\lib\resources.jar"/>
+<entry path="E:\eclipse\jre\lib\rt.jar"/>
+<entry path="E:\eclipse\jre\lib\sunrsasign.jar"/>
+<entry path="E:\eclipse\jre\lib\jsse.jar"/>
+<entry path="E:\eclipse\jre\lib\jce.jar"/>
+<entry path="E:\eclipse\jre\lib\charsets.jar"/>
+<entry path="E:\eclipse\jre\lib\jfr.jar"/>
+<entry path="E:\eclipse\jre\classes"/>
+</bootpath>
+<extensionDirs>
+<entry path="E:\eclipse\jre\lib\ext"/>
+<entry path="C:\Windows\Sun\Java\lib\ext"/>
+</extensionDirs>
+<endorsedDirs>
+<entry path="E:\eclipse\jre\lib\endorsed"/>
+</endorsedDirs>
+</libraryInfo>
+</libraryInfos>

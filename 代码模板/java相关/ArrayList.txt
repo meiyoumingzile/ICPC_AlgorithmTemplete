@@ -1,0 +1,20 @@
+相当于c++的vector 可变长数组，不够时候自动扩充，效率问题主要体现在扩充上，其余和数组效率相同
+
+boolean add() //添加元素到末尾
+void add(pos) //添加元素到指定位置
+
+E remove(int index)//移除指定位置某个元素，且返回
+bool remove(Object o) //第一次出现的元素o,没有返回false
+
+E get(pos)//返回指定下标的元素
+
+E set(int index, E element)//用某个元素代替某个位置上原本的
+
+int indexOf(Object o) //返回首次出现的索引
+
+
+void clear() //清空
+Object clone() //返回一个自己的复制，这个方法需要自己实现
+bool contains(Object o) //看看o是否在列表里存在
+
+

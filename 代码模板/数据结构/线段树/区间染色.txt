@@ -1,0 +1,73 @@
+struct Node{
+    int r,l,col,lz;
+};
+struct LineTree{//区间是左闭 左开[)
+    Node tree[MAX*4];
+    void buildTree(int now,int l,int r){//建树,初始化col和lz是-1，代表无颜色无标记
+        tree[now].l=l;
+        tree[now].r=r;
+        tree[now].col=-1;
+        tree[now].lz=-1;
+        if(r-l<=1){
+            return;
+        }
+        int mid=(l+r)/2,next=now*2;
+        buildTree(next,l,mid);
+        buildTree(next+1,mid,r);
+    }
+
+    void downLz(cint now){
+        int next=now<<1;
+        if(tree[now].lz!=-1){
+            tree[next+1].lz=tree[next].lz=tree[now].lz;
+            tree[next+1].col=tree[next].col=tree[now].lz;
+            tree[now].lz=-1;
+        }
+    }
+    void mergeSon(cint now){
+        Node &t=tree[now];
+        cint next=now<<1;
+        if(tree[next].col==tree[next+1].col){
+            t.col=tree[next].col;
+        }else{
+            t.col=-1;
+        }
+    }
+    void update(int now,int l,int r,int a){//颜色更新成a
+        Node &t=tree[now];
+        cint mid=(t.r+t.l)>>1,next=now<<1;
+        if(t.l==l&&t.r==r){
+            t.col=t.lz=a;
+        }else{
+            downLz(now);//没走到根节点更新
+            if(mid>=r){
+                update(next,l,r,a);
+            }else if(mid<=l){
+                update(next+1,l,r,a);
+            }else{
+                update(next,l,mid,a);
+                update(next+1,mid,r,a);
+            }
+            mergeSon(now);
+        }
+    }
+    int search(int now,int l,int r){//寻找区间颜色，颜色不同返回-1
+        Node &t=tree[now];
+        cint mid=(t.r+t.l)>>1,next=now<<1;
+        if(t.l==l&&t.r==r){
+            return t.col;
+        }else{
+            downLz(now);//没走到根节点更新
+            if(mid>=r){
+                return search(next,l,r);
+            }else if(mid<=l){
+                return search(next+1,l,r);
+            }else{
+                int x=search(next,l,mid);
+                int y=search(next+1,mid,r);
+                return x==y?x:-1;
+            }
+        }
+    }
+};
+LineTree tr;

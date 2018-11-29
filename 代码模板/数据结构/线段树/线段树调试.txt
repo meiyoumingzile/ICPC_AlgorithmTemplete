@@ -1,0 +1,9 @@
+void println(int n){
+        int k=1,i,j;
+        for(i=1;k<2*n;i*=2){
+            for(j=0;j<i;j++){
+                printf("[%d %d):len:%d lz:%d  ",tree[k+j].l,tree[k+j].r,tree[k+j].len,tree[k+j].lz);
+            }printf("\n");
+            k+=i;
+        }
+    }

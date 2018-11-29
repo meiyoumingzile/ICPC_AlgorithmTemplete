@@ -1,0 +1,113 @@
+/*
+*-------------------1：邻接表,//邻接表[i][j]的第二维i表示的是点的下标编号（它和这一维度Edge所封装的每个b是一样的），这样可以快速访问某个点；
+*/
+struct Edge{//表示边，且是有向边从·b到·e;w是权值
+    int b,e,val;
+    Edge(){};
+    Edge(int b,int e,int val){
+        sett(b,e,val);
+    }
+    void sett(int b,int e,int val){
+        this->b=b;
+        this->e=e;
+        this->val=val;
+    }
+};
+vector<Edge>adList[dotNum];//这个dotNum表示点的最大值
+
+vector<vector<Edge> > adList;//这样写没有上限但是需要一个个添加，先要添加一组空的vector
+
+如果图不频繁访问但需要插入删除，可以考虑list,list用法见C++STL使用说明
+list<Edge>adList[dotNum];
+struct Edge{
+    int e,val,k;
+    Edge(){}
+    Edge(int e,int val,int k){
+        this->e=e;
+        this->val=val;
+        this->k=k;
+    }
+};
+
+/*
+*--------------------2链式前向星，push表示加入一条边，结构体，e表示终点，val表达式权值，k表示下一个点编号
+*如果有必，链式前向星可以用一对奇偶数(如01 12 34 56....)的编号来存相反边，这样可以用^1来访问相反边
+*/
+struct Edge{
+    int e,val,k;
+    Edge(){}
+    Edge(const int &e,const int &val,const int &k){
+        this->e=e;
+        this->val=val;
+        this->k=k;
+    }
+};
+struct Graphic{
+    int V,E,S,T,size=0;
+    int head[MAX];
+    Edge edge[MAX*5];
+    void push(const int &b,const int &e,const int &val){
+        int t=head[b];
+        head[b]=size;
+        edge[size++]=Edge(e,val,t);
+    }
+	void pushMin(const int &b,const int &e,const int &val){//加入边如果存在更新成最小，可以修改这个函数
+        rg int i;
+        for(i=head[b];i!=-1&&edge[i].e!=e;i=edge[i].k);
+        if(i==-1){
+            push(b,e,val);
+        }else{
+            edge[i].val=min(edge[i].val,val);
+        }
+    }
+	/*void pop(int u,int i){
+        if(edge[i].p==-1){
+            head[u]=edge[i].k;
+            edge[head[u]].p=-1;
+        }else{
+            edge[edge[i].p].k=edge[i].k;
+            edge[edge[i].k].p=edge[i].p;
+        }
+    }*/
+	void clear(){
+        size=0;
+        memset(head,-1,sizeof(head));
+    }
+	void println(){
+        int i,j,next;
+        for(i=1;i<=V;i++){
+            printf("%d:::",i);
+            for(j=head[i];j!=-1;j=edge[j].k){
+                printf("%d ",edge[j].e);
+            }printf("\n");
+        }
+    }
+};
+
+Graphic g;
+
+/*
+*--------------------3邻接矩阵[i][j]代表从点i到点j距离，如果没有边是INF无限大，注意下标从1开始
+*/
+struct Graph{
+    int N,M;
+    int adMatrix[MAX][MAX];//邻接矩阵，注意初始化为INF,下标从1开始
+
+    Graph(){}
+    Graph(int N,int M){
+        sett(N,M);
+    }
+    void sett(N,M){
+        this->N=N;
+        this->M=M;
+        initMatrix(N);
+    }
+    void initMatrix(int N){
+        for(int i=0;i<=N;i++){
+            for(int j=0;j<=N;j++){
+                adMatrix[i][j]=(j==i?0:INF);
+            }
+        }
+    }
+
+};

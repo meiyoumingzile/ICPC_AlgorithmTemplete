@@ -1,0 +1,75 @@
+template <class T>
+struct deque{
+    struct Node{
+        T data;
+        Node *next,*pre;
+        Node(const T &data,Node *next=NULL,Node *pre=NULL){
+            this->data=data;
+            this->next=next;
+            this->pre=pre;
+            if(this->next){
+                this->next->pre=this;
+            }
+            if(this->pre){
+                this->pre->next=this;
+            }
+        }
+    };
+    Node *f,*b;
+    deque(){
+        f=b=NULL;
+    }
+    bool empty(){
+        return f==NULL&&b==NULL;
+    }
+    T front(){
+        return f->data;
+    }
+    T back(){
+        return b->data;
+    }
+    void pop_front(){
+        Node *t=f;
+        f=f->next;
+        if(f&&f->pre){
+            f->pre=NULL;
+        }else if(f==NULL){
+            f=b=NULL;
+        }
+        delete t;
+    }
+    void pop_back(){
+        Node *t=b;
+        b=b->pre;
+        if(b&&b->next){
+            b->next=NULL;
+        }else if(b==NULL){
+            f=b=NULL;
+        }
+        delete t;
+    }
+    void push_front(const T &a){
+        if(f){
+            Node *t=f;
+            f=new Node(a,t,NULL);
+        }else{
+            f=b=new Node(a);
+        }
+    }
+    void push_back(const T &a){
+        if(b){
+            Node *t=b;
+            b=new Node(a,NULL,t);
+        }else{
+            f=b=new Node(a);
+        }
+    }
+    void clear(){
+        f=b=NULL;
+    }
+    void println(){
+        for(Node *i=f;i;i=i->next){
+            printf("%d ",i->data.x);
+        }printf("\n");
+    }
+};

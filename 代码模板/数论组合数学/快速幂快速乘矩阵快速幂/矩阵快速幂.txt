@@ -1,0 +1,75 @@
+const int MATSIZE=10;
+struct M{
+    int m,n;
+    ll mat[MATSIZE][MATSIZE];
+    M(int n,int m){
+        init(n,m);
+    }
+    void init(int n,int m){
+        this->n=n;
+        this->m=m;
+        memset(mat,0,sizeof(mat));
+    }
+    void print(){
+        int i,j;
+        for(i=0;i<n;i++){
+            printf("%lld",mat[i][0]);
+            for(j=1;j<m;j++){
+                printf(" %lld",mat[i][j]);
+            }printf("\n");
+        }
+    }
+    void getIdmat(){
+        for(int i=0;i<n;i++){
+            mat[i][i]=1;
+        }
+    }
+};
+M matMul(const M &a,const M &b,ll mod){
+    M c(a.n,b.m);
+    if(a.m!=b.n){//第一个矩阵的列数m,要等于第二个矩阵行数才可以
+        printf("矩阵大小不合法！\n");
+        return c;
+    }
+    int i,j,k,r;
+    r=a.m;
+    for(i=0;i<c.n;i++){
+        for(j=0;j<c.m;j++){
+            c.mat[i][j]=0;
+            for(k=0;k<r;k++){//矩阵的行
+                c.mat[i][j]+=a.mat[i][k]*b.mat[k][j];
+                c.mat[i][j]%=mod;
+            }
+        }
+     }
+     return c;
+}
+M matMul(const M &a,ll b,ll mod){
+    M c(a.n,a.m);
+    int i,j,k,r;
+    for(i=0;i<c.n;i++){
+        for(j=0;j<c.m;j++){
+            c.mat[i][j]=a.mat[i][j]*b%mod;
+        }
+    }
+    return c;
+}
+M matPow(const M &a,ll k,ll mod){
+    M e(a.n,a.m),c(a.n,a.m);
+    if(a.n!=a.m){
+        printf("矩阵大小不合法！\n");
+        return e;
+    }
+    e.getIdmat();
+    if(k==0){
+        return e;
+    }
+    c=a;
+    while(k){
+        if(k%2==1)
+            e=matMul(e,c,mod);
+        c=matMul(c,c,mod);
+        k/=2;
+    }
+    return e;
+}

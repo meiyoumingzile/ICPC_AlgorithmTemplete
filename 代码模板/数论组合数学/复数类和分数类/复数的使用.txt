@@ -1,0 +1,34 @@
+template <class Data>
+struct Complex{
+    Data real,imag;//real+imagi
+    void sett(Data real,Data imag){
+        this->real=real;
+        this->imag=imag;
+    }
+    Complex operator + (const Complex &other){
+        Complex tmp;
+        tmp.sett(real+other.real,imag+other.imag);
+        return tmp;
+    }
+    Complex operator - (const Complex &other){
+        Complex tmp;
+        tmp.sett(real-other.real,imag-other.imag);
+        return tmp;
+    }
+    Complex operator * (const Complex &other){
+        Complex tmp;
+        tmp.sett(real*other.real-imag*other.imag,imag*other.real+real*other.imag);
+        return tmp;
+    }
+    Complex operator / (const Complex &other){
+        Complex tmp;
+        double m=other.real*other.real+other.imag*other.imag;
+        tmp.real=(real*other.real+imag*other.imag)/m;
+        tmp.imag=(imag*other.real-real*other.imag)/m;
+        return tmp;
+    }
+};
+c++stl里面有负数，complax
+complax<double> a
+a.real()=11;
+a.imag()=22;

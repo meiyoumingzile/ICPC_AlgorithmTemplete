@@ -1,0 +1,25 @@
+int A[MAX];
+v2 res[MAX];
+deque<v2>que1;
+deque<v2>que2;
+inline int pushASC(deque<v2>& que,cint a,cint i,cint m){//升序，求区间最小
+    while(!que.empty()&&que.back().x>=a){
+        que.pop_back();
+    }
+    que.push_back(v2(a,i));
+    while(!que.empty()&&i-que.front().y>=m){
+        que.pop_front();
+    }
+    //que.println();
+    return que.front().x;
+}
+inline int pushDESC(deque<v2>& que,cint a,cint i,cint m){//降序，求区间最大
+    while(!que.empty()&&que.back().x<=a){
+        que.pop_back();
+    }
+    que.push_back(v2(a,i));
+    while(!que.empty()&&i-que.front().y>=m){
+        que.pop_front();
+    }
+    return que.front().x;
+}

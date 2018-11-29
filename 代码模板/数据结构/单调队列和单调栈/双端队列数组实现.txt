@@ -1,0 +1,36 @@
+template <class T>
+struct deque{
+    T a[MAX];
+    int f,b;
+    deque(){
+        clear();
+    }
+    bool empty(){
+        return b>f;
+    }
+    T front(){
+        return a[f];
+    }
+    T back(){
+        return a[b];
+    }
+    void pop_front(){
+        f--;
+    }
+    void pop_back(){
+        b++;
+    }
+    void push_front(const T &x){
+        a[++f]=x;
+    }
+    void push_back(const T &x){
+        a[--b]=x;
+    }
+    void clear(){
+        f=MAX/2;
+	b=f+1;
+    }
+    int size(){
+        return f-b+1;
+    }
+};
