@@ -36,13 +36,18 @@ int main(int argc,char *argv[]){
     //freopen("out.txt","w",stdout); //输出重定向，输出数据将保存在out.txt文件中
     //srand(time(NULL));//有的OJ不能加这句话
     string a,b;
-    int i,j;
+    int i,j,len;
     while(1){//查找s1中所有匹配的s2
         scanf("%s",s2);
+        len=strlen(s2);
         getnext2(next2,s2);
-        for(i=0;i<=strlen(s2);i++){
+        for(i=0;i<=len;i++){
             printf("%d ",next2[i]);
-        }
+        }printf("\n");
+        getnext1(next1,s2);
+        for(i=0;i<=len;i++){
+            printf("%d ",next1[i]);
+        }printf("\n");
     }
 return 0;
 }

@@ -7,10 +7,9 @@ const int INF=1<<30;
 const int MAX=100010;
 const int mod=1e9+7;
 int A[MAX];
-
-void mysort(int *as, int left, int right){//[b,e]之间
+void quickSort(int *as, int left, int right){//[b,e]之间
     int i=left,j=right;
-    int m=as[(j+i)/2];
+    int m=as[(i+j)/2];
     while(i<=j){
         while(as[i]<m)
             i++;
@@ -22,9 +21,9 @@ void mysort(int *as, int left, int right){//[b,e]之间
         }
     }
     if(i<right)
-        mysort(as,i,right);
+        quickSort(as,i,right);
     if(left<j)
-        mysort(as,left,j);
+        quickSort(as,left,j);
 }
 
 int main(int argc,char *argv[]){
@@ -36,10 +35,9 @@ int main(int argc,char *argv[]){
     for(i=0;i<N;i++){
         scanf("%d",&A[i]);
     }
-    mysort(A,0,N-1);
-    printf("%d",A[0]);
-    for(i=1;i<N;i++){
-        printf(" %d",A[i]);
+    quickSort(A,0,N-1);
+    for(i=0;i<N;i++){
+        printf("%d ",A[i]);
     }
 return 0;
 }
