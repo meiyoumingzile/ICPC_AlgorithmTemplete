@@ -21,18 +21,11 @@ const int INF=1<<30;
 const int MAX=1000010;
 const int mod=1e9+7;
 bool vis[MAX];
-char sp[MAX];
 int p[MAX];
 int p_num;
-ll fac[MAX];
-void getFac(int N){
-    fac[0]=fac[1]=1;
-    for(int i=2;i<=N;i++){
-        fac[i]=fac[i-1]*i;
-    }
-}
+ll fac[20];
 
-void dfs(int nowLen,int m,int n){
+void dfs(int nowLen,int m,int n){//²âÊÔÓÃ 
     int i;
     if(nowLen==n){
         /*for(i=0;i<n;i++){
@@ -51,7 +44,12 @@ void dfs(int nowLen,int m,int n){
     }
 }
 
-
+void getFac(int N){
+    fac[0]=fac[1]=1;
+    for(int i=2;i<=N;i++){
+        fac[i]=fac[i-1]*i;
+    }
+}
 void getArr(int N,int n,int *res){
     bool v[100];
     int i,j,k,m,l,res_i=0;
@@ -82,19 +80,8 @@ int codeArr(int *A,int N){
     }
     return ans;
 }
-int codeArr(vector<int>A,int N){
-    int ans=0,i,j,cnt;
-    for(i=0;i<N-1;i++){
-        for(j=i+1,cnt=0;j<N;j++){
-            if(A[i]>A[j]){
-                cnt++;
-            }
-        }
-        ans+=cnt*fac[N-i-1];
-    }
-    return ans;
-}
 
+char sp[MAX];
 int main(int argc,char *argv[]){
     int i,j,N,n;
     int get[1000];

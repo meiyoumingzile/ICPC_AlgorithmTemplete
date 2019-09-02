@@ -36,15 +36,10 @@ int main(int argc,char *argv[]){
     //freopen("in.txt","r",stdin); //输入重定向，输入数据将从in.txt文件中读取
     //freopen("out.txt","w",stdout); //输出重定向，输出数据将保存在out.txt文件中
     //srand(time(NULL));//有的OJ不能加这句话
-    ll i,j,a,b,c;
-    a=7999999998888442;
-    b=99999941452252997;
-    for(i=0;i<MAX;i++){//经过实测快速乘法没什么卵用
-        //a%mod*b%mod;//跑0.035s
-        //quick_multiply(a,b,mod);
-        //quickmul(a,b,mod);//跑半天1.9s
-        a--;
-        b--;
+    ll i,j,a,b,c,m;
+    while(1){
+       scanf("%lld%lld%lld",&a,&b,&m);
+        printf("%lld\n",quickmi(a,b,m));
     }
 return 0;
 }
