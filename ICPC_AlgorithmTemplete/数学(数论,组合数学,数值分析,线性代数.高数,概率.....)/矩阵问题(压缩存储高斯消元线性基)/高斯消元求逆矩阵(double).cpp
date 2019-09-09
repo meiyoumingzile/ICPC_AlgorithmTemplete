@@ -117,19 +117,21 @@ struct M{
 };
 int main(int argc,char *argv[]){
     int m,n,i,j,k;
-    scanf("%d%d",&n,&m);
-    M a,b;
-    a.init(n,m);
-    for(i=0;i<n;i++)
-        for(j=0;j<m;j++)
-            scanf("%lf",&a.mat[i][j]);
-    b=a;
-    printf("%f\n",a.calcDet());
-    a.toUpTriMat();
-    a.print();
-    printf("\n");
-    a.toSimMat();
-    a.print();
+    while(1){
+        scanf("%d%d",&n,&m);
+        M a,b;
+        a.init(n,m);
+        for(i=0;i<n;i++)
+            for(j=0;j<m;j++)
+                scanf("%lf",&a.mat[i][j]);
+        b=a;
+        printf("%f\n",a.calcDet());
+        a.toUpTriMat();
+        a.print();
+        printf("\n");
+        a.toSimMat();
+        a.print();
+    }
 
 return 0;
 }

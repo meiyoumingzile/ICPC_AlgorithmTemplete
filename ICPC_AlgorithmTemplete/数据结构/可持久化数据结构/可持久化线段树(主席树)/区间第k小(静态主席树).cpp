@@ -18,7 +18,7 @@ struct Node{
     int sum,son[2];
 };
 struct PersistentLineTree{
-    int size,rlen;
+    int size,rlen,up;
     int root[MAX];//表示根节点集合，root[0]代表最原始的树
     Node tree[MAX<<5];
     void build(int l,int r){
@@ -53,7 +53,10 @@ struct PersistentLineTree{
         }
         return now;
     }
-    int searchKi(int root1,int root2,int tl,int tr,int k){//查询区间第k小，用法见文档
+    int searchKi(int l,int r,int tl,int tr,int k){//查询区间[l,r]的第k小
+        return __searchKi(root[l-1],root[r],tl,tr,k);
+    }
+    int __searchKi(int root1,int root2,int tl,int tr,int k){//查询区间第k小，用法见文档
         if (tr-tl<=1)//是叶子结点
             return tl;
         int tl1=tree[root1].son[0];
@@ -61,9 +64,9 @@ struct PersistentLineTree{
         int x=tree[tl2].sum - tree[tl1].sum;
         int mid=(tl+tr)/2;
         if(x>=k)
-            return searchKi(tl1,tl2,tl,mid,k);
+            return __searchKi(tl1,tl2,tl,mid,k);
         else
-            return searchKi(tree[root1].son[1],tree[root2].son[1],mid,tr,k-x);
+            return __searchKi(tree[root1].son[1],tree[root2].son[1],mid,tr,k-x);
     }
 };
 PersistentLineTree tr;
@@ -92,14 +95,14 @@ int main(){
         scanf("%d",&A[i].x);
         A[i].y=i;
 	}
-    up=discrete(A,disA,n);
-    tr.build(0,up);
+    tr.up=discrete(A,disA,n);
+    tr.build(0,tr.up);
     for(i=0;i<n;i++){
         tr.insert(0,up,disA[i]);
     }
     for(i=0;i<m;i++){
         scanf("%d%d%d",&l,&r,&k);//l和r从1开始
-        ans=tr.searchKi(tr.root[l-1],tr.root[r],0,up,k);
+        ans=tr.searchKi(l,r,0,up,k);
         printf("%d\n",A[ans].x);
     }
 return 0;

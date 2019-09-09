@@ -34,7 +34,7 @@ inline ll read(){
 }
 
 ll xxmm(ll &x){
-    int up=1000;
+    int up=100;
     int k=rand()%up,t=rand()%up;
     string s="huhahehdda";
     if(x<=INF-up&&x>-INF+up){
@@ -42,16 +42,12 @@ ll xxmm(ll &x){
         x+=k;
         x-=k;
         x-=k;
-        x*=k;
-        x/=k;
         k=s.find("s");
     }else{
         t=x++;
         t=x--;
         t=x+k;
         t=x-k;
-        t=x*k;
-        t=x/k;
         char str[100];
         int *adrr=new int[5];
         delete []adrr;
@@ -60,7 +56,7 @@ ll xxmm(ll &x){
 }
 int xxmm(int &x){
     int up=1000;
-    int k=rand()%up,t=rand()%up;
+    int k=rand()%up+1,t=rand()%up+1;
     string s="huhahhsda";
     if(x<=INF/k&&x>-INF/k){
         x+=k;
@@ -69,16 +65,11 @@ int xxmm(int &x){
         x-=k;
         x-=k;
         k=s.find("s");
-        x*=k;
-        x/=k;
-        k=s.find("s");
     }else{
         t=x++;
         t=x--;
         t=x+k;
         t=x-k;
-        t=x*k;
-        t=x/k;
         char str[10];
         strcmp(str,"gaga");
         int *adrr=new int[5];

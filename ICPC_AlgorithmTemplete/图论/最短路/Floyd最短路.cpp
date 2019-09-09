@@ -62,7 +62,7 @@ int main(int argc,char *argv[]){
     for(i=0;i<M;i++){
         scanf("%d%d%d",&b,&e,&w);
         adMatrix[b][e]=min(w,adMatrix[b][e]);
-        adMatrix[e][b]=min(w,adMatrix[e][b]);
+       // adMatrix[e][b]=min(w,adMatrix[e][b]);
     }
     FloydWarshall(N);
     printAll(N);

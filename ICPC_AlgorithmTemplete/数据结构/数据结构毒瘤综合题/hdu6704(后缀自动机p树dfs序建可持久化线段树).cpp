@@ -8,18 +8,18 @@ using namespace std;
 #define cll const long long &
 const int inv2=500000004;
 const int INF=2147483647;////2139062143
-const int MAX=100010;
+const int MAX=400010;
 const int mod=1e9+7;
 
 list<int>adlist[MAX];
-int high[MAX],binp[MAX][20],pLen[MAX],treeSize[MAX];//树上节点深度和向上的倍增数组
+int binp[MAX][20],pLen[MAX],treeSize[MAX];//树上节点深度和向上的倍增数组
 struct Node{
     int sum,son[2];
 };
 struct PersistentLineTree{
     int size,rlen;
     int root[MAX];//表示根节点集合，root[0]代表最原始的树
-    Node tree[MAX<<5];
+    Node tree[MAX<<6];
     void build(int l,int r){
         size=rlen=1;
         root[0]=__build(l,r);
@@ -52,7 +52,10 @@ struct PersistentLineTree{
         }
         return now;
     }
-    int searchKi(int root1,int root2,int tl,int tr,int k){//查询区间第k小，用法见文档
+    int searchKi(int l,int r,int tl,int tr,int k){//查询区间[l,r]的第k小
+        return __searchKi(root[l-1],root[r],tl,tr,k);
+    }
+    int __searchKi(int root1,int root2,int tl,int tr,int k){//查询区间第k小，用法见文档
         if (tr-tl<=1)//是叶子结点
             return tl;
         int tl1=tree[root1].son[0];
@@ -60,9 +63,9 @@ struct PersistentLineTree{
         int x=tree[tl2].sum - tree[tl1].sum;
         int mid=(tl+tr)/2;
         if(x>=k)
-            return searchKi(tl1,tl2,tl,mid,k);
+            return __searchKi(tl1,tl2,tl,mid,k);
         else
-            return searchKi(tree[root1].son[1],tree[root2].son[1],mid,tr,k-x);
+            return __searchKi(tree[root1].son[1],tree[root2].son[1],mid,tr,k-x);
     }
 };
 PersistentLineTree tr;
@@ -73,7 +76,7 @@ inline int toInt(const char &a){
 }
 struct SAM{
     int root,last,size;
-    int p[MAX*2],nodelen[MAX*2],son[MAX*2][CHARCNT],pos[MAX];
+    int p[MAX],nodelen[MAX],son[MAX][CHARCNT],pos[MAX],mainid[MAX];
 
     //eplen[i]是编号为i的节点endpos集合元素个数,du是只看p指针的每个点入度数
     SAM(){
@@ -97,6 +100,7 @@ struct SAM{
         int f=toInt(a),now,node,q,nq;
         node=addNode(nodelen[last]+1,1);
         pos[node]=si;
+        mainid[si]=node;
         for(now=last;now!=-1&&son[now][f]==-1;now=p[now]){
             son[now][f]=node;
         }
@@ -123,33 +127,36 @@ struct SAM{
 };
 SAM sam;
 int LRDid[MAX],LRDlen;//后序遍历编号
-void dfsSAMTree(int now,int n){
-    int i,k,j;
+void dfsSAMTree(int now,int n,int h=0){
     treeSize[now]=1;
+    if(h>10000){
+        while(1);
+    }
     for(auto next:adlist[now]){
-    	high[next]=high[now]+1;
-    	for(j=0;;j++){//更新倍增数组
-            k=binp[next][j];
+        for(int j=0;;j++){//更新倍增数组
+            int k=binp[next][j];
             if(j<pLen[k]){
                 binp[next][pLen[next]++]=binp[k][j];
             }else{
                 break;
             }
         }
-        dfsSAMTree(next,n);
+        dfsSAMTree(next,n,h+1);
         treeSize[now]+=treeSize[next];
     }
-    tr.insert(0,sam.size,now);
-    LRDid[now]=LRDlen++;
+    //printf("%d->%d->%d\n",now,LRDlen,sam.pos[now]);
+    if(sam.pos[now])
+        tr.insert(0,sam.size+1,sam.pos[now]);
+    else
+        tr.insert(0,sam.size+1,sam.size);
+    LRDid[now]=++LRDlen;
 }
-int findTargetNode(int now,int h){//返回编号
+int findTargetNode(int now,int len){//返回编号,祖先里nodelen第一个大于等于h的节点
     int i;
-    //printf("(%d %d)\n",now,h);
-    while(high[now]>h){
-        if(high[now]==h+1){
-            return binp[now][0];
-        }
-        for(i=0;high[binp[now][i]]>h;i++);
+    while(sam.nodelen[now]>=len){
+        for(i=0;i<pLen[now]&&sam.nodelen[binp[now][i]]>=len;i++);
+        if(i==0)
+            return now;
         now=binp[now][i-1];
     }
     return now;
@@ -164,8 +171,7 @@ void init(int n){
     for(int i=0;i<n;i++){
         sam.push(str[i],i+1);
     }
-    tr.build(0,sam.size);
-    high[sam.root]=1;
+    tr.build(0,sam.size+1);
     memset(pLen,0,sizeof(pLen));
     memset(binp,0,sizeof(binp));
     for(int i=1;i<sam.size;i++){//初始化倍增数组，得到邻接表
@@ -174,43 +180,59 @@ void init(int n){
     }
     LRDlen=0;
     dfsSAMTree(sam.root,n);
-   /* for(int i=0;i<sam.size;i++){
-        printf("%d: ",i);
-        for(auto next:adlist[i]){
-            printf("%d ",next);
-        }printf("\n");
-    }printf("\n");
-    for(int i=0;i<sam.size;i++){
-        printf("%d,%d: ",pLen[i],i);
-        for(int j=0;j<pLen[i];j++){
-            printf("%d ",binp[i][j]);
-        }printf("\n");
+   /* for(int i=1;i<sam.size;i++){
+        printf("%d->%d :%d %d\n",sam.p[i],i,sam.nodelen[sam.p[i]],sam.nodelen[i]);
     }*/
 }
 int main(int argc,char *argv[]){
     //freopen("in.txt","r",stdin); //输入重定向，输入数据将从in.txt文件中读取
     //freopen("out.txt","w",stdout); //输出重定向，输出数据将保存在out.txt文件中
     //srand(time(NULL));//有的OJ不能加这句话
-	int i,n,j,len,m,T,l,r,k,id;
-	cin>>T;
-	while(T--){
+    int i,n,j,len,m,T,l,r,k,id,ans;
+    cin>>T;
+    while(T--){
         scanf("%d%d%s",&n,&m,str);
         init(n);
         for(i=0;i<m;i++){
             scanf("%d%d%d",&l,&r,&k);
             len=r-l+1;
-            id=findTargetNode(r,len+1);
-            printf("%d %d\n",id,r);
-            printf("%d %d\n",treeSize[id],LRDid[id]);
-			printf("%d\n",tr.searchKi(LRDid[id]-treeSize[id],LRDid[id]-1,0,sam.size,k));
+            id=findTargetNode(sam.mainid[r],len);
+
+            //printf("%d %d %d\n",high[id],len+1,sam.p[id]);
+             //printf("id:%d\n",id);
+            //printf("%d %d\n",treeSize[id],LRDid[id]);
+            if(treeSize[id]>=k){
+                ans=tr.searchKi(LRDid[id]-treeSize[id]+1,LRDid[id],0,sam.size+1,k);
+                printf("%d\n",ans==sam.size?-1:ans-len+1);
+            }else{
+                printf("-1\n");
+            }
         }
-	}
+    }
 return 0;
 }
 /*
 11
 7 7
 aabbabd
+2 2 2
 2 3 1
 
+2
+12 6
+aaabaabaaaab
+3 3 4
+2 3 2
+7 8 3
+3 4 2
+1 4 2
+8 12 1
+1 1
+a
+1 1 1
+
+2
+12 6
+aaabaabaaaab
+3 4 3
 */
