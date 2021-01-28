@@ -37,7 +37,7 @@ void FloydWarshall(int N){//dis初始化规则,i==j是0，否则是INF
     for(k=1;k<=N;k++){
         for(i=1;i<=N;i++){
             for(j=1;j<=N;j++){
-                if(dis[i][k]==INF||dis[k][j]==INF){
+                if(dis[i][k]==INF||dis[k][j]==INF){//i到i为无穷大INF
 
                 }else if(dis[i][j]>dis[i][k]+dis[k][j]){
                     dis[i][j]=dis[i][k]+dis[k][j];//变成最短路径

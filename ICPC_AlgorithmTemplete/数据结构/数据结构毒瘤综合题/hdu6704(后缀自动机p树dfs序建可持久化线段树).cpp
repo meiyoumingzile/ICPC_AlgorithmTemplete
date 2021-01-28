@@ -8,18 +8,29 @@ using namespace std;
 #define cll const long long &
 const int inv2=500000004;
 const int INF=2147483647;////2139062143
-const int MAX=400010;
+const int MAX=200010;
 const int mod=1e9+7;
+struct v2{
+    int x,y;
+	v2(){}
+	v2(const int &x,const int &y){
+		sett(x,y);
+	}
+    void sett(const int &x,const int &y){
+        this->x=x;
+        this->y=y;
+    }
+};
 
-list<int>adlist[MAX];
-int binp[MAX][20],pLen[MAX],treeSize[MAX];//树上节点深度和向上的倍增数组
+vector<int>adlist[MAX];
+int binp[MAX][21],pLen[MAX],treeSize[MAX];//树上节点深度和向上的倍增数组
 struct Node{
     int sum,son[2];
 };
 struct PersistentLineTree{
     int size,rlen;
     int root[MAX];//表示根节点集合，root[0]代表最原始的树
-    Node tree[MAX<<6];
+    Node tree[MAX*50];
     void build(int l,int r){
         size=rlen=1;
         root[0]=__build(l,r);
@@ -127,11 +138,8 @@ struct SAM{
 };
 SAM sam;
 int LRDid[MAX],LRDlen;//后序遍历编号
-void dfsSAMTree(int now,int n,int h=0){
+/*void dfsSAMTree(int now,int n,int h=0){
     treeSize[now]=1;
-    if(h>10000){
-        while(1);
-    }
     for(auto next:adlist[now]){
         for(int j=0;;j++){//更新倍增数组
             int k=binp[next][j];
@@ -150,6 +158,45 @@ void dfsSAMTree(int now,int n,int h=0){
     else
         tr.insert(0,sam.size+1,sam.size);
     LRDid[now]=++LRDlen;
+}*/
+
+stack<v2>st;
+void dfs(int root){
+    v2 now,next;
+    st.push(v2(root,0));
+    for(int i=0;i<sam.size;i++){
+        treeSize[i]=1;
+    }
+    while(!st.empty()){
+        now=st.top();
+        st.pop();
+        if(now.y<adlist[now.x].size()){
+            now.y++;
+            st.push(now);
+        }else{
+            if(sam.p[now.x]>=0)
+                treeSize[sam.p[now.x]]+=treeSize[now.x];
+            if(sam.pos[now.x])
+                tr.insert(0,sam.size+1,sam.pos[now.x]);
+            else
+                tr.insert(0,sam.size+1,sam.size);
+            LRDid[now.x]=++LRDlen;
+            continue;
+        }
+        next.x=adlist[now.x][now.y-1];
+        next.y=0;
+
+        int v=next.x;
+        for(int j=0;;j++){//更新倍增数组
+            int k=binp[v][j];
+            if(j<pLen[k]){
+                binp[v][pLen[v]++]=binp[k][j];
+            }else{
+                break;
+            }
+        }
+        st.push(next);
+    }
 }
 int findTargetNode(int now,int len){//返回编号,祖先里nodelen第一个大于等于h的节点
     int i;
@@ -179,11 +226,12 @@ void init(int n){
         adlist[sam.p[i]].push_back(i);
     }
     LRDlen=0;
-    dfsSAMTree(sam.root,n);
+    dfs(sam.root);
    /* for(int i=1;i<sam.size;i++){
         printf("%d->%d :%d %d\n",sam.p[i],i,sam.nodelen[sam.p[i]],sam.nodelen[i]);
     }*/
 }
+enum index{underflow, overflow};
 int main(int argc,char *argv[]){
     //freopen("in.txt","r",stdin); //输入重定向，输入数据将从in.txt文件中读取
     //freopen("out.txt","w",stdout); //输出重定向，输出数据将保存在out.txt文件中
@@ -235,4 +283,6 @@ a
 12 6
 aaabaabaaaab
 3 4 3
+
+13 14 3 6 11 12 2 5 9 10 1 15 4 7 8 0 3 3 4
 */

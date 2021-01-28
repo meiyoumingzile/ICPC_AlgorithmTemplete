@@ -13,7 +13,7 @@ using namespace std;
 #define cll const long long &
 const int inv2=500000004;
 const int INF=2147483647;////2139062143
-const int MAX=1000010;
+const int MAX=100000010;
 const int mod=1e9+7;
 
 bool vis[MAX];
@@ -40,7 +40,7 @@ int main(int argc,char *argv[]){
     int n,i,j;
     //scanf("%d",&n);
    // n=100;
-    getPrimes(MAX);
+    getPrimes(MAX-10);
     /*printf("%d\n",pCnt);
     for(i=0;i<pCnt;i++){
         printf("%d ",p[i]);

@@ -18,14 +18,14 @@ inline int toInt(const char &a){
 }
 struct SAM{
     int root,last,size;
-    int p[MAX*2],nodelen[MAX*2],son[MAX*2][CHARCNT];
+    int fail[MAX*2],nodelen[MAX*2],son[MAX*2][CHARCNT];
     SAM(){
        clear();
     }
     void clear(){
         root=last=0;//根节点编号是0
         memset(son[0],-1,sizeof(son[0]));
-        p[0]=-1;
+        fail[0]=-1;
         nodelen[0]=0;
         size=1;
     }
@@ -39,28 +39,28 @@ struct SAM{
         node=addNode(nodelen[last]+1);
         while(now!=-1&&son[now][f]==-1){
             son[now][f]=node;
-            now=p[now];
+            now=fail[now];
         }
         if(now!=-1){
             q=son[now][f];
             if(nodelen[now]+1==nodelen[q]){
-                p[node]=q;
+                fail[node]=q;
             }else{
                 nq=addNode(nodelen[now]+1);
                 memcpy(son[nq], son[q], sizeof son[q]);
-                p[nq]=p[q];
-                p[q]=p[node]=nq;
+                fail[nq]=fail[q];
+                fail[q]=fail[node]=nq;
                 while(now!=-1&&son[now][f]==q){
                     son[now][f]= nq;
-                    now=p[now];
+                    now=fail[now];
                 }
             }
 
         }else{
-             p[node]=root;
+             fail[node]=root;
         }
         last=node;
-        return nodelen[node]- nodelen[p[node]];
+        return nodelen[node]- nodelen[fail[node]];
     }
 };
 SAM sam;

@@ -86,6 +86,7 @@ int main(){
     for(i=0;i<g.E;i++){
         scan(u);scan(v);scan(val);
         g.push(u,v,val);
+       // g.push(v,u,val);
     }
     Dijkstra(s);
     for(i=1;i<=g.V;i++){
@@ -93,4 +94,3 @@ int main(){
     }
 return 0;
 }
-

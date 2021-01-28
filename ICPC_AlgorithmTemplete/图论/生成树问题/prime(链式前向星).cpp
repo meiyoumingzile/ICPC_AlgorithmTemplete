@@ -75,7 +75,7 @@ bool isConnect(){//检查是不是联通图
     return 1;
 }
 bool isTree[MAX];//当前点是否在树里，true表示在
-int MST_prim(){//范围是int,如果longlong就要改变最大值INF
+int MST_prim(){//前提是连通图，如果longlong就要改变最大值INF
     rg int i,t,ans=0;
     memset(isTree,0,sizeof isTree);
     isTree[1]=1;
