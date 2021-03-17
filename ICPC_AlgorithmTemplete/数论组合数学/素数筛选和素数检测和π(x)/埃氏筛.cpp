@@ -14,9 +14,8 @@ void eratosthenes_sieve(int n){
     primesCount=0;
     memset(flag,0,sizeof(flag));
     sqrtn=(int)ceil(sqrt(n));
-
     for(i=2;i<=sqrtn;i++){
-        if(!flag[i]){//flag是false代表是素数
+        if(!flag[i]){
             primes[primesCount++]=i;
             for(j=i*i;j<n;j+=i)
                 flag[j]=true;
