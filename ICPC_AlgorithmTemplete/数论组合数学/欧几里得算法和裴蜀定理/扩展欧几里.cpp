@@ -32,7 +32,6 @@ struct v2{
     }
 };
 
-
 v2 ex_gcd(ll a,ll b){//a,b不同时为0，扩展欧几里得,a,b要么同正要么同负才有效；
     v2 ans;
     if(b==0){

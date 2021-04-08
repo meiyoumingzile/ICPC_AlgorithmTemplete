@@ -21,16 +21,16 @@ struct PersistentLineTree{
     int size,rlen,up;
     int root[MAX];//表示根节点集合，root[0]代表最原始的树
     Node tree[MAX<<5];
-    void build(int l,int r){
+    void init(int n){
         size=rlen=1;
-        root[0]=__build(l,r);
+        root[0]=__init(0,n);
     }
-    int __build(int l,int r){
+    int __init(int l,int r){
         int now=size++,mid=(l+r)/2;
         tree[now].sum=0;
         if(r-l>1){
-            tree[now].son[0]=__build(l,mid);
-            tree[now].son[1]=__build(mid, r);
+            tree[now].son[0]=__init(l,mid);
+            tree[now].son[1]=__init(mid, r);
         }
         return now;
     }
@@ -96,7 +96,7 @@ int main(){
         A[i].y=i;
 	}
     tr.up=discrete(A,disA,n);
-    tr.build(0,tr.up);
+    tr.init(tr.up);
     for(i=0;i<n;i++){
         tr.insert(0,up,disA[i]);
     }
