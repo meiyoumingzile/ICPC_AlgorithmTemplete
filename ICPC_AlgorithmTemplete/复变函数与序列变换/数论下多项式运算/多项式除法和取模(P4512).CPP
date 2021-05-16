@@ -9,7 +9,6 @@ using namespace std;
 #define getName(xxx) #xxx
 #define ll long long
 #define inf 1e-5
-#define rg register
 const int inv2=500000004;
 const int INF=2147483647;
 const int MAX=4000010;
@@ -34,8 +33,8 @@ namespace NTT{//FFT准备较多，避免名称混淆，定义个命名空间，以后避免重名的麻烦
         return i;
     }
     inline void ntt(ll *F,int ni,int fp,int xlen){//把原本数组变换
-        register int i,j,n,m,k,bit,N=p2[ni];
-        register ll d,inv,G;
+        int i,j,n,m,k,bit,N=p2[ni];
+        ll d,inv,G;
         ll *temp,*p,*q;
         for(i=0,j=0;i<N-1;++i){
             if(i<j) swap(F[i],F[j]);

@@ -3,7 +3,6 @@
 using namespace std;
 #define ll long long
 #define inf 1e-5
-#define rg register
 #define cint const int &
 #define cll const long long &
 const int inv2=500000004;
@@ -11,7 +10,7 @@ const int INF=2147483647;////2139062143
 const int MAX=2000010;
 const int mod=1e9+7;
 inline void scan(int &x){
-    rg char c;
+    char c;
     for(c=getchar();c<'0'||c>'9';c=getchar());
     for(x=0;c>='0'&&c<='9';c=getchar()) x=x*10+c-'0';
 }
@@ -78,7 +77,7 @@ void tarjan(int now,int &len){//递归代码，tarjan算法
 
 int n,m;
 bool get2SAT(){//求联通分量 ，解2sat问题 
-    rg int i,len;
+    int i,len;
     newCnt=0;
     for(i=1;i<=g.V;i++){
         if(vis[i]==0){

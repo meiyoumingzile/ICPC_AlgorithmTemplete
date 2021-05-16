@@ -3,7 +3,6 @@
 using namespace std;
 #define ll long long
 #define inf 1e-5
-#define rg register
 #define cint const int &
 #define cll const long long &
 #define cdou const double &
@@ -56,7 +55,7 @@ namespace FFT{//FFT准备较多，避免名称混淆，定义个命名空间，以后避免重名的麻烦
         for(int i=0;i<n;i++)wn[i] = cd(cos(2*PI/n*i),sin(2*PI/n*i));
     }
     inline void fft(cd *x,int ni,int fp){//在原址进行fft变换要求数组长度要大于p2[ni]
-        register int i,j,m,N=p2[ni],n=N>>1;
+         int i,j,m,N=p2[ni],n=N>>1;
         cd *p,*q;
         for(i=0,j=0;i<N;++i){
             if(i<j)swap(x[i],x[j]);
@@ -453,7 +452,7 @@ struct BigInteger{
     BigInteger* fmul(BigInteger *b,cint st=0){//FFT实现,从b的第st位算起
         if(is0()||b->is0())
             return new BigInteger("0");
-        rg ll i,len,N,next=0,s,ni;
+          ll i,len,N,next=0,s,ni;
         ni=max(FFT::changeN(size*2),FFT::changeN((b->size-st)*2));//为什么是乘2，这样把FFT数组取长了，大数就能多压几位
         N=FFT::p2[ni];
         FFT::getwn(N);
@@ -493,7 +492,7 @@ struct BigInteger{
             return x;
         }
         BigInteger *ans,*c,*d;
-        rg int i,j,k,len=2,sz=size-st;
+          int i,j,k,len=2,sz=size-st;
         x->size=2;
         int *bn=b->nu+b->size-2;
         k=digitCnt(bn[1]);
@@ -542,7 +541,7 @@ struct BigInteger{
         return ans;
     }
     BigInteger* sqrtn(){//开n次根号,用牛顿迭代实现
-        rg int i,k,n,next,len,len2,fp=sg,clen=(size+1)/2;
+          int i,k,n,next,len,len2,fp=sg,clen=(size+1)/2;
         if(is0())
             return clone();
         BigInteger *c=new BigInteger(1),*t,*s;
@@ -589,7 +588,7 @@ struct BigInteger{
         return c;
     }
     inline void write(cint x){
-        for(rg int i=BIT-1;i>=0;i--)
+        for(  int i=BIT-1;i>=0;i--)
             putchar(x/p10[i]%10+'0');
     }
     void print(){//打印格式长度等于BIT
@@ -597,7 +596,7 @@ struct BigInteger{
             putchar('0');
             return;
         }
-        rg int i,j,x;
+          int i,j,x;
         if(sg==-1)putchar('-');
         printf("%d",nu[size-1]);
         for(i=size-2;i>=0;i--)

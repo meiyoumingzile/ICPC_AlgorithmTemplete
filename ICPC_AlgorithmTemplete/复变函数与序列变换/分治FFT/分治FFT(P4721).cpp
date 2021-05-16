@@ -1,3 +1,13 @@
+#include<bits/stdc++.h>
+//#include<windows.h>
+using namespace std;
+#define ll long long
+#define inf 1e-5
+const int inv2=500000004;
+const int INF=2147483647;////2139062143
+const int MAX=1000010;
+const int mod=998244353;
+
 const double PI=acos(-1.0);
 #define cd Complex
 struct Complex{
@@ -68,4 +78,64 @@ namespace FFT{//FFT准备较多，避免名称混淆，定义个命名空间，以后避免重名的麻烦
                 x[i]=x[i]/N;
         }
     }
+    void convolution(int *x,int n,int *y,int m,int *ans){//求卷积,已知x数组和y数组，n为x和y长度最大值，求ans
+        int i,ni=changeN(max(n,m));
+        int N=p2[ni];
+        cd *xx=new cd[N];
+        cd *yy=new cd[N];
+        for(i=0;i<n;i++){
+            xx[i]=cd(x[i],0);
+        }
+        for(i=0;i<m;i++){
+            yy[i]=cd(y[i],0);
+        }
+        fft(xx,ni,1);
+        fft(yy,ni,1);
+        for(i=0;i<N;i++){
+            xx[i]=xx[i]*yy[i];
+        }
+        fft(xx,ni,-1);
+        for(i=0;i<N;i++){
+            ans[i]=xx[i].r+0.1;
+        }
+        delete xx;
+        delete yy;
+    }
+    void divConvolution(ll *x,ll *y,int l,int r){//求分治卷积，即分治FFT，已知x数组，求y，区间[l,r)
+        if(l>=r)
+            return;
+        int mid=(l+r)/2,len=(r-l+1);
+        int n=mid-l,m=r-mid;
+        divConvolution(x,y,l,mid);
+        int i,ni=changeN(max(n,m));
+        int N=p2[ni];
+        cd *xx=new cd[N];
+        cd *yy=new cd[N];
+        for(i=0;i<n;i++){
+            xx[i]=cd(x[l+i],0);
+            yy[i]=cd(y[l+i],0);
+        }
+        fft(xx,ni,1);
+        fft(yy,ni,1);
+        for(i=0;i<N;i++){
+            yy[i]=xx[i]*yy[i];
+        }
+        fft(yy,ni,-1);
+        for(i=0;i<m;i++){
+            y[mid+i]=yy[i].r+0.1;
+            //y[i]%=mod;
+        }
+        delete xx;
+        delete yy;
+        divConvolution(x,y,mid,r);
+    }
 };
+
+
+
+int main(int argc,char *argv[]){
+	int i,j,k,t,T,n,m;
+
+return 0;
+}
+

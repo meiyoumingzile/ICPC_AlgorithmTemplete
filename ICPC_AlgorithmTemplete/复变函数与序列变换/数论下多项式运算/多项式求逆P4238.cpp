@@ -4,7 +4,6 @@ using namespace std;
 #define getName(xxx) #xxx
 #define ll long long
 #define inf 1e-5
-#define rg register
 const int inv2=500000004;
 const int INF=2147483647;
 const int MAX=2000010;
@@ -57,8 +56,8 @@ namespace NTT{//FFT准备较多，避免名称混淆，定义个命名空间，以后避免重名的麻烦
     }
     //x长度必须是2的整数倍,ni是2的多少次幂，N=p2[ni]表示x数组要FFT的长度, fp是-1表示逆变换， xlen是x有效长度不够补0，up新数组长度
     inline ll* ntt(const ll *x,int ni,int fp,int xlen=MAX,int up=MAX){
-        register int i,j,n,m,bit,now,N=p2[ni];
-        register ll d,inv,b,G,Gn;
+        int i,j,n,m,bit,now,N=p2[ni];
+        ll d,inv,b,G,Gn;
         ll *temp,*F;
         F=new ll[up];
         for(i=0;i<N;++i)

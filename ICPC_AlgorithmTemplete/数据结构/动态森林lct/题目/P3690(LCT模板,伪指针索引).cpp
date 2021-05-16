@@ -12,14 +12,18 @@ void println(int *arr,int b,int e){//[b,e)
     }printf("\n");
 }
 struct LCT{
-    int n,p[MAX],son[MAX][2],val[MAX],xorsum[MAX];
-    bool lz[MAX];//懒惰标记，用来做splay的区间翻转。
-    /*p[i]是i父节点; son[i]是i左右儿子,0代表左边，1代表右边,son[i][0]=0代表空指针，son特指splay的儿子
-    val[i]是点i权值，xorsum[i]是i异或和
-    */
+    struct Node{
+        int p,son[2],val,h,lz;//懒惰标记，用来做splay的区间翻转。
+        int xorsum;
+         /*p[i]是i父节点; son[i]是i左右儿子,0代表左边，1代表右边,son[i][0]=0代表空指针，son特指splay的儿子
+        val[i]是点i权值，xorsum[i]是i异或和
+        */
+    };
+    int size=0;
+    Node tree[MAX];
 
     LCT(){
-       // memset();
+       size=0;
     }
 
     void pushdown(){
