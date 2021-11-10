@@ -1,0 +1,20 @@
+ll fac[MAX];
+void getFac(ll m){
+    fac[0]=1;
+    for(ll i=1;i<m;i++){
+        fac[i]=fac[i-1]*i%mod;
+    }
+}
+
+ll quickmi(ll a,ll b,ll mod){//最短写法
+    ll ans=1;
+    for(a%=mod;b;b>>=1,a=a*a%mod)
+        if(b&1)
+            ans=ans*a%mod;
+    return ans;
+}
+
+ll CC(ll n,ll m){//卡特兰矩阵
+    ll inv=quickmi(fac[m]*fac[n-m]%mod,mod-2,mod);
+    return fac[n]*inv%mod;;
+}
