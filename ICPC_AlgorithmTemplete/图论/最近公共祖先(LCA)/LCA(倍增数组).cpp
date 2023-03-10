@@ -13,34 +13,30 @@ const int INF=2147483647;
 const int MAX=10010;
 const int mod=1e9+7;
 
-struct Edge {
-    int b,e,val;
-    void sett(int b,int e){
-        this->b=b;
-        this->e=e;
-        this->val=0;
-    }
-};
-vector<Edge>adList[MAX];//储存树,有向图
+vector<int>adList[MAX];//储存树,有向图
 int V,E;//V个点
 int h[MAX];//高度
 int p[MAX][15];//p[u][i]节点u的向上走2^i步是哪个节点
 int pLen[MAX];
 
-void dfsh(int now){
+int dfs_seq[500001];
+int dfs_seq_i=0;
+void dfsh(int now,int pre){
     int i,j,k,next;
-    for(i=0;i<adList[now].size();i++){
-        next=adList[now][i].e;
-        h[next]=h[now]+1;
-        for(j=0;;j++){//更新倍增数组
-            k=p[next][j];
-            if(pLen[k]>j){
-                p[next][pLen[next]++]=p[k][j];
-            }else{
-                break;
+    dfs_seq[now]=dfs_seq_i++;
+    for(auto next : adList[now]){
+        if(pre!=next){
+            h[next]=h[now]+1;
+            for(j=0;;j++){//更新倍增数组
+                k=p[next][j];
+                if(pLen[k]>j){
+                    p[next][pLen[next]++]=p[k][j];
+                }else{
+                    break;
+                }
             }
+            dfsh(next,now);
         }
-        dfsh(next);
     }
 }
 void toSameh(int &c,int minh){
@@ -72,33 +68,32 @@ int getLCA(int a,int b){
     }
     return toSameDot(a,b);
 }
-void init(){
-    int i,k,j,root;
-    for(i=1;i<=V;i++){//初始化倍增数组
-        for(j=0;j<adList[i].size();j++){
-            k=adList[i][j].e;
-            p[k][pLen[k]++]=i;
+
+void init(int V,int root){//bfs初始化
+    queue<int>que;
+    que.push(root);
+    while(!que.empty()){
+        int now=que.front();
+        que.pop();
+        for(auto next : adList[now]){
+            if(p[now][0]!=next){
+                p[next][pLen[next]++]=now;
+                que.push(next);
+            }
         }
     }
-    for(i=1;i<=V;i++){//寻找根
-        if(pLen[i]==0){
-            root=i;
-            break;
-        }
-    }
-    dfsh(root);//初始化高度和倍增数组
+    h[1]=1;
+    dfsh(root,-1);//初始化高度和倍增数组
 }
 
 int main(int argc,char *argv[]){
     int i,j,k,n,m,T,b,e,a,root,Q;
-    Edge edge;
     scanf("%d%d",&V,&Q);//V个点Q次查询
     for(i=1;i<V;i++){//V-1条边,保证输入是一棵树，且第一个数是第二个数的父节点
         scanf("%d%d",&b,&e);
-        edge.sett(b,e);
-        adList[b].push_back(edge);
+        adList[b].push_back(e);
     }
-    init();
+    init(V,1);
     for(i=0;i<Q;i++){//Q次查询
         scanf("%d%d",&a,&b);
         printf("LCA:%d\n",getLCA(a,b));

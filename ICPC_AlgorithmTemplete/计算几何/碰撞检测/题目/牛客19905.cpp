@@ -12,6 +12,7 @@ const int inv2=500000004;
 const int INF=2147483647;////2139062143
 const int MAX=1000010;
 const int mod=1e9+7;
+
 const double DINF=2147483647.0;////2139062143
 const double PI=acos(-1);
 struct v2{
@@ -221,7 +222,7 @@ vector<v2> lineFp(const v2 &a,const v2 &b,const v2 &c,const v2 &d){//œﬂ∂Œab∫ÕcdŒ
         if(lineContain(c,d,b)>=0){
             ans.push_back(b);
         }
-        dotDup(ans);
+        //dotDup(ans);
     }
     return ans;//≤Êª˝∫Õ0µƒπÿœµ
 }
@@ -475,6 +476,7 @@ struct Polygon{//∂‡±ﬂ–Œ,±£÷§ «Õπ∂‡±ﬂ–Œ
         }
         dotDup(dotList);
         ans->init(dotList,dotList.size());
+        //»•÷ÿ
         return ans;
     }
     void println(){
@@ -486,21 +488,44 @@ struct Polygon{//∂‡±ﬂ–Œ,±£÷§ «Õπ∂‡±ﬂ–Œ
 
 
 
-
+Polygon *arr[55];
+v2 dot[55];
 int main(int argc,char *argv[]){
-	int i,j,k,T;
-	v2 r1,r2;
-	r1.init(1.0,3.0);
-	r2.init(2.0,5.0);
-	vector<v2>li{v2(2,5),v2(99,99),v2(0, 100),v2(-10,101),v2(-10,50),v2(-10,0),v2(-5,-10),v2(-5,-5)};
-    dotSort(li);
-    for(auto a :li){
-        printf("%lf %lf\n",a.x,a.y);
-    }
+	int i,j,k,T,n,m,x,y;
+	cin>>m;
+	for(i=0;i<m;i++){
+        scanf("%d",&n);
+        for(j=0;j<n;j++){
+            scanf("%d%d",&x,&y);
+            dot[j].init(x,y);
+        }
+        arr[i]=new Polygon();
+        arr[i]->init(dot,n);
+	}
+//	arr[0]->println();
+//	arr[1]->println();
+	Polygon *ans=arr[0];
+	for(i=1;i<m;i++){
+        Polygon *t=ans->collision(arr[i]);
+        //t->println();
+        delete ans;
+        ans=t;
+	}
+	printf("%.3lf",ans->getArea());
 return 0;
 }
 /*
-111
-0 0 1 0 1 1 0 1
-5 5 5 0 0.5 0 0.5 5
+2
+6
+-2 0
+-1 -2
+1 -2
+2 0
+1 2
+-1 2
+4
+0 -3
+1 -1
+2 2
+-1 0
 */

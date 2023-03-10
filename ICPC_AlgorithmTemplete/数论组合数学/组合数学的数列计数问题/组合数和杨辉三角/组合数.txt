@@ -14,7 +14,7 @@ ll quickmi(ll a,ll b,ll mod){//最短写法
     return ans;
 }
 
-ll CC(ll n,ll m){//卡特兰矩阵
+ll CC(ll n,ll m){
     ll inv=quickmi(fac[m]*fac[n-m]%mod,mod-2,mod);
     return fac[n]*inv%mod;;
 }

@@ -3,17 +3,12 @@
 using namespace std;
 #define ll long long
 #define inf 1e-5
-#define rg register
-#define cint const int &
-#define cll const long long &
-#define cdou const double &
-#define cv2 const v2 &
 const int inv2=500000004;
 const int INF=2139062143;////2139062143
 const int MAX=5001;
 const int mod=1e9+7;
-inline void scan(int &x){
-    rg char c;
+void scan(int &x){
+    char c;
     for(c=getchar();c<'0'||c>'9';c=getchar());
     for(x=0;c>='0'&&c<='9';c=getchar()) x=x*10+c-'0';
 }
@@ -69,7 +64,7 @@ struct Union{
 };
 Union un;
 int MST_kruskal(){//范围是int,如果longlong就要改变最大值INF,必须是联通图
-    rg int i,k,b,ans=0,minval;
+    int i,k,b,ans=0,minval;
     un.init(g.V+1);
     sort(g.edge,g.edge+g.size,[](const Edge &a,const Edge &b){
          return a.val<b.val;

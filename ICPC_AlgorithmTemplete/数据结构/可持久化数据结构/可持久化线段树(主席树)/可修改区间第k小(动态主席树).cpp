@@ -9,7 +9,7 @@ using namespace std;
 #define cv2 const v2 &
 const int inv2=500000004;
 const int INF=2147483647;////2139062143
-const int MAX=100010;
+const int MAX=200010;
 const int mod=1e9+7;
 /*
 未在节点保存端点，而是放在递归函数里(记作tl,tr)来节省空间
@@ -18,21 +18,42 @@ struct Node{
     int sum,son[2];
 };
 struct PersistentLineTree{//动态持久化化线段树
-    int size,rlen,up;
+    int size,rlen,n;//n是树状数组的上限，不一定等于线段树叶子节点个数
     int root[MAX];//表示根节点集合，root[0]代表最原始的树
-    Node tree[MAX<<5];
-    int BITtree[MAX];
+    Node tree[MAX<<6];
+    int BITtree[MAX];//BITtree[i]代表第i颗权值线段树的根节点在root中的编号
     //树状数组节点,维护root[]数组,而root[]代表根节点集合的地址，所以BITtree[i]代表在树状数组编号为i的节点对应到主席树中的根节点的地址
-    int path[MAX];//path[i]代表在树状数组编号为i的节点对应到主席树中的根节点的地址
+
+    int BITpath[2][MAX];//记录树状数组的路径,查找区间第k小时候用
+    int BITpath_len[2];
+    int rememberBITpath(int pos,int *path){//记录路径数组
+        int len=0;
+        for(int i=pos;i>0;i-=lowbit(i)){
+            path[len++]=root[i];
+        }
+        return len;
+    }
+    void updateBITpath(int *path,int len,int fp){//更新路径数组
+        for(int i=0;i<len;i++){
+            path[i]=tree[path[i]].son[fp];
+        }
+    }
+    int getSumBITpath(int *path,int len,int fp){//树状数组查询，前pos位置的线段树中，x的出现次数
+        int ans=0;
+        for(int i=0;i<len;i++){
+            ans+=tree[tree[path[i]].son[fp]].sum;
+        }
+        return ans;
+    }
     int lowbit(int x){
         return x&(-x);
     }
 
-    void init(int n){//建立一刻空的主席树
+    void init(int n,int m){//建立一刻空的主席树,n是树状数组上限，m是线段树宽度
         size=rlen=1;
-        root[0]=__init(0,n);
-        up=n;
-        memset(BITtree,0,sizeof BITtree);
+        this->n=n;
+        root[0]=__init(0,m);
+        memset(BITtree,0,sizeof BITtree);//初始阶段树状数组为空，全都指向root[0]
     }
     int __init(int l,int r){
         int now=size++,mid=(l+r)/2;
@@ -43,13 +64,11 @@ struct PersistentLineTree{//动态持久化化线段树
         }
         return now;
     }
-    void BIT_insert(int BITx,int n,int pos,int val){
-        //对线段树进行可持久化添加，沿着树状数组的路径，BITx是树状数组节点号，n是树状数组节点个数，pos是位置，val是增量
-        for(int i=BITx;i<=n;i+=lowbit(i))//i要大于0
-            BITtree[i]+=__insert(BITtree[i],0,up,pos,val);//持久化插入，但不更新版本
-    }
-    void insert(int x,int cnt=1){//单点修改,在最新版本基础上x位置加1,x是离散化之后的数值
-        root[rlen++]=__insert(root[rlen-1],0,up,x,cnt);//更新版本
+    void insert(int pos,int x,int val,int up){//单点修改,在最新版本基础上x位置加1,x是离散化之后的数值
+        for(int i=pos;i<=n;i+=lowbit(i)){//i要大于0
+            int last=root[i];
+            root[i]=__insert(root[i],0,up,x,val);//更新版本
+        }
     }
     int __insert(int other,int tl,int tr,int x,int cnt){//单点修改,在other版本的树的基础上的x位置加1,x是离散化之后的数值
         int now=size++;
@@ -66,24 +85,29 @@ struct PersistentLineTree{//动态持久化化线段树
         }
         return now;
     }
-    int searchKi(int root1,int root2,int tl,int tr,int k){//查询区间第k小，非递归查询
+
+    int searchKi(int l,int r,int k,int up){//查询区间[l,r]的第k小，,使用树状数组的更新
+        BITpath_len[0]=rememberBITpath(l,BITpath[0]);
+        BITpath_len[1]=rememberBITpath(r,BITpath[1]);
+        return __searchKi(root[l],root[r],0,up,k);
+    }
+
+    int __searchKi(int root1,int root2,int tl,int tr,int k){//查询区间第k小，用法见文档
         if (tr-tl<=1)//是叶子结点
             return tl;
-       /* auto getLeftSum=[](int now){//得到当前节点做节点的sum值
-            int ans=0;
-            for(int i=now;i>0;i-=lowbit(i))//i要大于0
-                ans+=this->BITtree[i];
-            return ans;
-
-        };*/
         int tl1=tree[root1].son[0];
         int tl2=tree[root2].son[0];
-        int x=tree[tl2].sum - tree[tl1].sum;
+        int x=getSumBITpath(BITpath[1],BITpath_len[1],0)-getSumBITpath(BITpath[0],BITpath_len[0],0);
         int mid=(tl+tr)/2;
-        if(x>=k)
-            return searchKi(tl1,tl2,tl,mid,k);
-        else
-            return searchKi(tree[root1].son[1],tree[root2].son[1],mid,tr,k-x);
+        if(x>=k){
+            updateBITpath(BITpath[0],BITpath_len[0],0);//更新路径数组
+            updateBITpath(BITpath[1],BITpath_len[1],0);
+            return __searchKi(tl1,tl2,tl,mid,k);
+        }else{
+            updateBITpath(BITpath[0],BITpath_len[0],1);//更新路径数组
+            updateBITpath(BITpath[1],BITpath_len[1],1);
+            return __searchKi(tree[root1].son[1],tree[root2].son[1],mid,tr,k-x);
+        }
     }
 };
 PersistentLineTree tr;
@@ -115,7 +139,7 @@ struct DataCompress{//数据压缩类
         up=k;
         return k;
     }
-    int ind(int x){//压缩数据变为真实数据
+    int ind(int x){//返回离散化后数据
         return lower_bound(toval,toval+up,x)-toval;//调用二分查找函数，x是离散化后的数据，也可以用map实现。
     }
 };
@@ -143,23 +167,31 @@ int main(){
     up=data.compress(A,up);
     //以上树输入和离散化，下面开始建动态时持久化线段树
 
-    tr.init(up);
-    for(i=0;i<n;i++){
-        tr.insert(0,data.ind(A[i]));
+    tr.init(n,up);
+    for(i=0;i<n;i++){//下标[1,n]
+        tr.insert(i+1,data.ind(A[i]),1,up);
     }
     for(i=0;i<m;i++){
         if(question[i].k!=-1){
             l=question[i].x;
             r=question[i].y;
             k=question[i].k;
-            ans=tr.searchKi(tr.root[l-1],tr.root[r],0,up,k);
+            ans=tr.searchKi(l-1,r,k,up);
             printf("%d\n",data.toval[ans]);
         }else{
-            tr.insert(x,-1);
-            A[question[i].x]=question[i].y;
-            x=data.ind(question[i].y);//调用二分查找函数，x是离散化后的数据
-            tr.insert(x);
+            tr.insert(question[i].x,data.ind(A[question[i].x-1]),-1,up);
+            A[question[i].x-1]=question[i].y;
+            tr.insert(question[i].x,data.ind(question[i].y),1,up);
         }
     }
 return 0;
 }
+/*
+5 5
+25957 6405 15770 26287 26465
+Q 2 2 1
+Q 3 4 1
+Q 4 5 1
+Q 1 2 2
+Q 4 4 1
+*/

@@ -1,0 +1,31 @@
+int searchk(int *arr,int left,int right,int k){//[l,r],k从1开始
+    int h,i=left,j=right;
+    int m=arr[(i+j)/2],mid=(i+j)/2;
+    if(k==right-left+1){
+        int ans=arr[left];
+        for(int h=left+1;h<=right;h++){
+            if(ans<arr[h])
+                ans=arr[h];
+        }
+        return ans;
+    }
+    while(i<=j){
+        while(arr[i]<m)
+            i++;
+        while(arr[j]>m)
+            j--;
+        if(i<=j){
+            swap(&arr[i],&arr[j]);
+            i++;j--;
+        }
+    }
+//    for(h=left;h<=right;h++){
+//        printf("%d ",tmp[h]);
+//    }printf("\n");
+//    printf("--%d %d %d %d\n",i,j,m,k);
+    if(i-left>=k){
+        return searchk(tmp,left,i-1,k);
+    }else{
+        return searchk(tmp,i,right,k-(i-left));
+    }
+}

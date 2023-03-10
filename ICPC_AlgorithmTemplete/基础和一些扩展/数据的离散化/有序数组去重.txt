@@ -1,0 +1,6 @@
+for(m=0,i=1;i<n;i++){//有序数组去重
+        if(num[m]!=num[i]){
+            num[++m]=num[i];
+        }
+    }
+    m++;
